@@ -6,7 +6,7 @@ Inspired by *Express-like* design, Exura focuses on clarity, modularity, and con
 ## ✨ Key Features
 
 - ⚡ **Simple Routing**  
-  Define routes with `Exura::mount($method, $route, $callback)` — expressive and easy to read.
+  Define routes with `Exura::module($method, $route, $callback)` — expressive and easy to read.
 
 - 🛡️ **Error & Exception Handling**  
   All errors and exceptions are automatically converted into structured JSON.
@@ -23,13 +23,13 @@ Inspired by *Express-like* design, Exura focuses on clarity, modularity, and con
 ## 🔍 Example
 
 ```php
-Exura::mount('GET', 'demo', function() {
+Exura::module('GET', 'demo', function() {
   Exura::state(200);
   return [
     'data' => 'Hello World 👋'
   ];
 });
-Exura::mount('POST', 'demo', function() {
+Exura::module('POST', 'demo', function() {
   $data1 = Exura::method('data1', false);
 
   Exura::return(
@@ -37,7 +37,7 @@ Exura::mount('POST', 'demo', function() {
     code: 200
   );
 });
-Exura::mount('DELETE', 'demo', function() {
+Exura::module('DELETE', 'demo', function() {
   // Simulated error
   $x = $y + 2; 
 
