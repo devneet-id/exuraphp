@@ -88,12 +88,14 @@ php rune watch
 
 ## 🎯 G O A L
 Exura will:
-- Be fully integrated with **Rune** as its built-in build engine.
+- Be fully integrated with **Rune** as its built-in module bundler and task engine.
 
-- Feature a custom **preprocessing system**, inspired by JSX — but built natively into Rune’s environment.
+- Feature a custom **preprocessing and execution system** for APIs, inspired by reactive patterns — built natively into Rune’s environment.
 
-- Embrace **all aspects of modern JavaScript**, including API design, reactive patterns, modular structure, and future-facing concepts.
+- Support **asynchronous, non-blocking, and side-effect aware workflows**, allowing developers to handle background tasks and deferred execution efficiently.
+
+- Embrace **modern backend development concepts**, including structured API design, modular response handling, and forward-compatible architecture.
 
 - Stay committed to **never slowing down or interfering** with the developer's workflow.
 
-Exura.js is here to assist — not to intrude.
+Exura.php is here to assist — not to intrude.
