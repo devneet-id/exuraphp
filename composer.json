@@ -1,0 +1,6 @@
+{
+    "require": {
+        "devneet/rune": "main-dev",
+        "php-code-minifier/php-code-minifier": "^1.2"
+    }
+}
