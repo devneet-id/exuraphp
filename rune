@@ -68,7 +68,6 @@ Chanter::cast('build', function() {
     Crafter::seed('LANGUAGE', ['php']);
 
     Crafter::shard('src/root.php');
-    // Crafter::shard('src/tool.php');
     Crafter::shard('src/main.php');
   });
 
