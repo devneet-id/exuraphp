@@ -97,8 +97,8 @@ Chanter::cast('watch', function() {
 });
 
 Chanter::cast('serve', function() {
-  Specter::cast('php8 rune watch', ['exit' => false]);
-  Specter::cast('php8 -S localhost:8000 -t C:\laragon\www\__Project\Exura\dev\php/', ['exit' => false]);
+  Specter::cast('{{self}} rune watch', ['exit' => false]);
+  Specter::cast('{{self}} -S localhost:8000 -t C:\laragon\www\__Project\Exura\dev\php/', ['exit' => false]);
 });
 
 #sentinel-codex

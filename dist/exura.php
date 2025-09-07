@@ -183,7 +183,7 @@ class ExuraEnvironment {
 }
 class Exura {
 
-  public static function mount($request, $route, $execute) {
+  public static function module($request, $route, $execute) {
     $request = strtoupper($request);
     ExuraEnvironment::initialize();
 
