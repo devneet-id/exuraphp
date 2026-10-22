@@ -1,6 +1,6 @@
 <?php
 /* 
- * E X U R A
+ * E X U R A - {{ VERSION }}
  * 
  * created by | Anwar Achilles
  * 
@@ -9,7 +9,7 @@ class ExuraEnvironment {
 
 
   public static $configure = [
-    'version'=> '1.0',
+    'version'=> '{{ VERSION }}',
     'url'=> '',
   ];
 

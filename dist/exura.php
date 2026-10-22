@@ -1,7 +1,7 @@
 <?php
-/* RUNE 1.0.17 | Created By @anwarachilles */
+/* RUNE 1.11 | Created By @anwarachilles */
 /* 
- * E X U R A
+ * E X U R A - 1.1.0
  * 
  * created by | Anwar Achilles
  * 
@@ -10,7 +10,7 @@ class ExuraEnvironment {
 
 
   public static $configure = [
-    'version'=> '1.0',
+    'version'=> '1.1.0',
     'url'=> '',
   ];
 
