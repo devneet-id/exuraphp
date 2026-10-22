@@ -12,18 +12,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/devneet-id/rune.git",
-                "reference": "f578bff4ae743c8ab87f8cda70ec78002f823b7f"
+                "reference": "dce9adc15218170d8797ade826be8c1d4b564c8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/devneet-id/rune/zipball/f578bff4ae743c8ab87f8cda70ec78002f823b7f",
-                "reference": "f578bff4ae743c8ab87f8cda70ec78002f823b7f",
+                "url": "https://api.github.com/repos/devneet-id/rune/zipball/dce9adc15218170d8797ade826be8c1d4b564c8e",
+                "reference": "dce9adc15218170d8797ade826be8c1d4b564c8e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -49,7 +48,7 @@
                 "issues": "https://github.com/devneet/rune/issues",
                 "source": "https://github.com/devneet/rune"
             },
-            "time": "2025-08-03T05:43:56+00:00"
+            "time": "2025-10-02T21:31:32+00:00"
         },
         {
             "name": "php-code-minifier/php-code-minifier",
@@ -837,7 +836,7 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }

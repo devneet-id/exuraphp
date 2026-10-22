@@ -96,8 +96,9 @@ Chanter::cast('watch', function() {
 });
 
 Chanter::cast('serve', function() {
-  Specter::cast('{{self}} rune watch', ['exit' => false]);
-  Specter::cast('{{self}} -S localhost:8000 -t C:\laragon\www\__Project\Exura\dev\php/', ['exit' => false]);
+  $root = realpath(__DIR__ . '/../../exura-dev') ?: __DIR__;
+  Specter::cast('{{self}} cast watch', ['exit' => false]);
+  Specter::cast('{{self}} -S localhost:8000 -t "' . $root . '"', ['exit' => false]);
 });
 
 #sentinel-codex
