@@ -1,6 +1,6 @@
 <?php
 /* 
- * E X U R A
+ * E X U R A - {{ VERSION }}
  * 
  * created by | Anwar Achilles
  * 
@@ -9,7 +9,7 @@ class ExuraEnvironment {
 
 
   public static $configure = [
-    'version'=> '1.0',
+    'version'=> '{{ VERSION }}',
     'url'=> '',
   ];
 
@@ -85,11 +85,11 @@ class ExuraEnvironment {
       $method = array_merge($method, $extra);
     }
 
-    // normalisasi key
+    // drop the route key from "?/route" and normalize keys
     $normalized = [];
     foreach ($method as $key => $val) {
-      $cleanKey = ltrim($key, '/');
-      $normalized[$cleanKey] = $val;
+      if (str_starts_with((string) $key, '/')) continue;
+      $normalized[$key] = $val;
     }
 
     return $normalized;
@@ -148,14 +148,22 @@ class ExuraEnvironment {
 
 
 
+  // the whole route must match from its start; '*' matches the rest (user/* -> user/42)
   public static function matchRoute($pattern) {
-    $currentRoute = self::getRoute();
+    $currentRoute = trim(self::getRoute(), '/');
 
-    $currentRoute = preg_replace('/^[^\/]+\.php\/?/', '', $currentRoute);
+    // drop the script path (exura-dev/index.php) or its folder (exura-dev) in front of the route
+    $script = trim($_SERVER['SCRIPT_NAME'] ?? '', '/');
+    foreach ([$script, trim(dirname($script), '/.')] as $prefix) {
+      if ($prefix !== '' && str_starts_with($currentRoute . '/', $prefix . '/')) {
+        $currentRoute = trim(substr($currentRoute, strlen($prefix)), '/');
+        break;
+      }
+    }
 
-    $pattern = str_replace('*', '.*', preg_quote($pattern, '/'));
+    $parts = array_map(fn($part) => preg_quote($part, '/'), explode('*', trim($pattern, '/')));
 
-    return (bool) preg_match('/(^|\/)' . $pattern . '($|\/)/i', $currentRoute);
+    return (bool) preg_match('/^' . implode('.*', $parts) . '$/i', $currentRoute);
   }
 
 
@@ -172,11 +180,6 @@ class ExuraEnvironment {
   }
 
 
-
-
-  public static function methodShouldBe() {
-
-  }
 
 
 }

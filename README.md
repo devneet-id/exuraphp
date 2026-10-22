@@ -1,67 +1,71 @@
 # E X U R A . P H P
 
-**Exura.php** is a minimalist PHP micro-framework designed to simplify modern backend development.  
-Inspired by *Express-like* design, Exura focuses on clarity, modularity, and control — without the bloat of large frameworks.
+**Exura.php** is an HTTP API micro-framework for PHP: a route, a function, a JSON response — in an *Express-like* style.
+Part of the **Exura series** — the power of a modern API framework in a single, super-light file.
 
 ## ✨ Key Features
 
-- ⚡ **Simple Routing**  
-  Define routes with `Exura::module($method, $route, $callback)` — expressive and easy to read.
+- ⚡ **Simple routing** — `Exura::module($method, $route, $callback)`; method can be a list (`['PUT', 'PATCH']`), route matches from the start with `*` as wildcard (`user/*`); works with `index.php?/route` or a rewritten path, no server config required.
+- 📑 **Request data** — `Exura::method('key', $default)` reads JSON body, form data and query string in one call; `Exura::method()` returns them all.
+- 📦 **Responses** — return an array, or use `Exura::return($data, $code)`, `Exura::state($code)`, `Exura::data($key, $value)` and `Exura::header([...])`.
+- 🛡️ **Errors as JSON** — PHP errors and exceptions become a structured JSON response with status `500`.
+- 🔍 **Trace** — every response carries an `E X U R A` block (url, route, method, request) for easier debugging.
 
-- 🛡️ **Error & Exception Handling**  
-  All errors and exceptions are automatically converted into structured JSON.
+## 📦 Install
 
-- 📦 **Response Management**  
-  Use `Exura::return()`, `Exura::state()`, or `Exura::header()` to control responses clearly.
+Copy `dist/exura.php` (or `dist/exura.min.php`) into your project and require it:
 
-- 📑 **Method Helper**  
-  Easily retrieve request data using `Exura::method()`.
-
-- 🔍 **Trace & Debug Info**  
-  Attach traces or additional method info into responses for easier debugging.
+```php
+require __DIR__ . '/exura.php';
+```
 
 ## 🔍 Example
 
 ```php
-Exura::module('GET', 'demo', function() {
-  Exura::state(200);
-  return [
-    'data' => 'Hello World 👋'
-  ];
-});
-Exura::module('POST', 'demo', function() {
-  $data1 = Exura::method('data1', false);
+require __DIR__ . '/exura.php';
 
-  Exura::return(
-    data: ['data1'=> $data1],
-    code: 200
-  );
+// GET index.php?/hello
+Exura::module('GET', 'hello', function() {
+  return ['data' => 'Hello World 👋'];
 });
-Exura::module('DELETE', 'demo', function() {
-  // Simulated error
-  $x = $y + 2; 
 
-  return [
-    'data'=> 'DELETE:hello world',
-    'method'=> Exura::method()
-  ];
+// POST index.php?/notes   body: {"title": "First note"}
+Exura::module('POST', 'notes', function() {
+  $title = Exura::method('title', 'untitled');
+
+  Exura::return(['data' => ['title' => $title]], 201);
 });
+
+// GET index.php?/fail → 500 with the error as JSON
+Exura::module('GET', 'fail', function() {
+  throw new RuntimeException('Something went wrong');
+});
+
+// nothing matched → 404 as JSON
+Exura::fallback();
 ```
 
-Simple, clean, and powerful — that’s the Exura.php way ✨
-Perfect for developers who love concise code, full control, and zero bloat.
+## 🧩 The Exura Series
 
-## 🛠️ BUILD WITH RUNE
+Exura mirrors a modern CSS / JS / PHP framework — at a fraction of the weight, without losing the abilities of a framework.
 
-**Exura** uses the **Rune** build engine.  
-Before getting started, we recommend reading the official documentation here:  
+| Package | Focus | Repository |
+|---|---|---|
+| **exuracss** | modern semantic styling | [devneet-id/exuracss](https://github.com/devneet-id/exuracss) |
+| **exurajs** | modern reactive JavaScript | [devneet-id/exurajs](https://github.com/devneet-id/exurajs) |
+| **exuraphp** | modern HTTP API endpoints | [devneet-id/exuraphp](https://github.com/devneet-id/exuraphp) |
+
+## 🛠️ Shaped with Rune
+
+This project is shaped with **Rune** — a lore-driven, modular concept beneath PHP that responds to development rather than dictating it.  
+Its runite, `cast`, holds the casts that turn `src/` into `dist/`.  
 👉 <https://github.com/devneet-id/rune>
 
-Although in most cases you can simply run the available `build` commands, understanding the **Rune structure** will help you better track and manage post-processing tasks more efficiently.
+You can simply run the casts below; knowing how a runite works helps when you want to shape your own.
 
-Requirements, Make sure you have:
+Requirements:
 - **Composer** installed
-- **PHP version 8+**
+- **PHP version 8.1+**
 
 Then run this command:
 
@@ -69,33 +73,32 @@ Then run this command:
 composer install
 ```
 
-To view the main rune script:
+The runite of this project is `cast`. To view its main screen (all casts with notes):
 ```shell
-php rune
+php cast
 ```
 
 To build the project:
 ```shell
-php rune build
-php rune build --min=true
+php cast build
+php cast build --min=true
 ```
 
-Development mode (auto watch & build on changes):
+Version (stored in the runite itself as `const VERSION`, applied on build):
 ```shell
-php rune watch
+php cast version
+php cast version --up            # 1.0.0 -> 1.0.1  (--up=minor | major | release)
+php cast version --pre           # 1.0.1 -> 1.0.1-dev  (--pre=beta.1)
+php cast version --set=1.0.0
 ```
 
+## 🎯 Goal
 
-## 🎯 G O A L
-Exura will:
-- Be fully integrated with **Rune** as its built-in module bundler and task engine.
+Exura.php will:
 
-- Feature a custom **preprocessing and execution system** for APIs, inspired by reactive patterns — built natively into Rune’s environment.
-
-- Support **asynchronous, non-blocking, and side-effect aware workflows**, allowing developers to handle background tasks and deferred execution efficiently.
-
-- Embrace **modern backend development concepts**, including structured API design, modular response handling, and forward-compatible architecture.
-
-- Stay committed to **never slowing down or interfering** with the developer's workflow.
+- Cover the **whole HTTP layer** — route parameters (`/user/:id`) on top of wildcards, the 404 fallback and method lists.
+- Add **middleware hooks** (before / after) for auth, CORS and validation — still in a single file.
+- Separate **development and production** — the trace block only where it helps.
+- Never slow down or interfere with the developer's workflow.
 
 Exura.php is here to assist — not to intrude.
