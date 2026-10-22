@@ -5,8 +5,8 @@ Part of the **Exura series** — the power of a modern API framework in a single
 
 ## ✨ Key Features
 
-- ⚡ **Simple routing** — `Exura::module($method, $route, $callback)`; works with `index.php?/route` or a rewritten path, no server config required.
-- 📑 **Request data** — `Exura::method('key', $default)` reads JSON body, form data and query string in one call.
+- ⚡ **Simple routing** — `Exura::module($method, $route, $callback)`; method can be a list (`['PUT', 'PATCH']`), route matches from the start with `*` as wildcard (`user/*`); works with `index.php?/route` or a rewritten path, no server config required.
+- 📑 **Request data** — `Exura::method('key', $default)` reads JSON body, form data and query string in one call; `Exura::method()` returns them all.
 - 📦 **Responses** — return an array, or use `Exura::return($data, $code)`, `Exura::state($code)`, `Exura::data($key, $value)` and `Exura::header([...])`.
 - 🛡️ **Errors as JSON** — PHP errors and exceptions become a structured JSON response with status `500`.
 - 🔍 **Trace** — every response carries an `E X U R A` block (url, route, method, request) for easier debugging.
@@ -33,7 +33,6 @@ Exura::module('GET', 'hello', function() {
 Exura::module('POST', 'notes', function() {
   $title = Exura::method('title', 'untitled');
 
-  Exura::header(['Content-Type: application/json']);
   Exura::return(['data' => ['title' => $title]], 201);
 });
 
@@ -41,6 +40,9 @@ Exura::module('POST', 'notes', function() {
 Exura::module('GET', 'fail', function() {
   throw new RuntimeException('Something went wrong');
 });
+
+// nothing matched → 404 as JSON
+Exura::fallback();
 ```
 
 ## 🧩 The Exura Series
@@ -94,7 +96,7 @@ php cast version --set=1.0.0
 
 Exura.php will:
 
-- Cover the **whole HTTP layer** — route parameters (`/user/:id`), wildcards, a 404 fallback, several methods per route and consistent JSON headers.
+- Cover the **whole HTTP layer** — route parameters (`/user/:id`) on top of wildcards, the 404 fallback and method lists.
 - Add **middleware hooks** (before / after) for auth, CORS and validation — still in a single file.
 - Separate **development and production** — the trace block only where it helps.
 - Never slow down or interfere with the developer's workflow.
