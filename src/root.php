@@ -17,6 +17,8 @@ class ExuraEnvironment {
 
   public static $response = [];
 
+  public static $notice = [];
+
   
   
   public static function initialize() {
@@ -99,12 +101,28 @@ class ExuraEnvironment {
 
   public static function setError() {
     set_error_handler(function($errno, $errstr, $errfile, $errline) {
-      ExuraEnvironment::setResponse('error', [
+      // respect error_reporting() and the @ operator
+      if (!(error_reporting() & $errno)) {
+        return true;
+      }
+
+      $error = [
         'type'    => $errno,
         'message' => $errstr,
         'file'    => $errfile,
         'line'    => $errline,
-      ]);
+      ];
+
+      // deprecations and notices are noted in the trace; the response keeps going
+      if (in_array($errno, [E_DEPRECATED, E_USER_DEPRECATED, E_NOTICE, E_USER_NOTICE], true)) {
+        ExuraEnvironment::$notice[] = $error;
+        ExuraEnvironment::setTrace('notice', ExuraEnvironment::$notice);
+        return true;
+      }
+
+      // warnings and errors answer 500
+      ExuraEnvironment::setResponse('error', $error);
+      return true;
     });
 
     set_exception_handler(function($e) {
