@@ -3,6 +3,12 @@
 
 class Exura {
 
+  // rebase the settings: Exura::configure(['mode' => 'production'])
+  public static function configure( $options = [] ) {
+    ExuraEnvironment::$configure = array_merge(ExuraEnvironment::$configure, $options);
+    return ExuraEnvironment::$configure;
+  }
+
   // $request: 'GET' or a list ['PUT', 'PATCH']; $route: 'notes', 'user/*'
   public static function module($request, $route, $execute) {
     $request = is_array($request) ? array_map('strtoupper', $request) : strtoupper($request);
@@ -68,10 +74,13 @@ class Exura {
     if (!empty($code)) {
       self::state($code);
     }
+    if (isset($_SERVER['REQUEST_TIME_FLOAT'])) {
+      ExuraEnvironment::setTrace('time', round((microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000, 1) . 'ms');
+    }
     if (!headers_sent()) {
       header('Content-Type: application/json');
     }
-    echo json_encode(ExuraEnvironment::$response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    echo json_encode(ExuraEnvironment::getResponse(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
   }
 

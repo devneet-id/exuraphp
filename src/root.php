@@ -8,9 +8,11 @@
 class ExuraEnvironment {
 
 
+  // rebased by Exura::configure(); mode: 'development' (default) | 'production'
   public static $configure = [
     'version'=> '{{ VERSION }}',
     'url'=> '',
+    'mode'=> 'development',
   ];
 
   public static $method = [];
@@ -28,7 +30,7 @@ class ExuraEnvironment {
 
     self::$configure['url'] = $scheme . "://" . $host . ($path ? $path . '/' : '/');
 
-    self::setResponse('E X U R A - ' . self::$configure['version'], [
+    self::setResponse(self::getTrace(), [
       'url'=> self::$configure['url'],
       'state'=> http_response_code(),
       'route'=> self::getRoute(),
@@ -157,8 +159,36 @@ class ExuraEnvironment {
     }
   }
 
+  public static function getTrace() {
+    return 'E X U R A - ' . self::$configure['version'];
+  }
+
+  public static function isProduction() {
+    return (self::$configure['mode'] ?? 'development') === 'production';
+  }
+
+  // the answer as it leaves: development keeps the trace and the full error;
+  // production drops the trace and keeps only a message a client may see
+  public static function getResponse() {
+    $response = self::$response;
+    if (!self::isProduction()) {
+      return $response;
+    }
+
+    unset($response[self::getTrace()]);
+    if (isset($response['error'])) {
+      $code = http_response_code();
+      $response['error'] = [
+        'message' => ($code >= 500 || !is_array($response['error']))
+          ? 'Internal Server Error'
+          : ($response['error']['message'] ?? 'Error'),
+      ];
+    }
+    return $response;
+  }
+
   public static function setTrace($key, $value) {
-    self::setResponse('E X U R A - ' . self::$configure['version'], [$key=>$value]);
+    self::setResponse(self::getTrace(), [$key=>$value]);
   }
 
 
